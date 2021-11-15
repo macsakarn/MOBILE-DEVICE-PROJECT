@@ -12,7 +12,7 @@ export default class TextBoxStack extends Component {
   render() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="TextBox" component={TextBox} />
+        <Stack.Screen name="TextBoxScreen" component={TextBox} />
         <Stack.Screen name="TextCreate" component={TextBox2} />
       </Stack.Navigator>
     );
