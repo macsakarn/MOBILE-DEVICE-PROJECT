@@ -10,7 +10,10 @@ const Stack = createNativeStackNavigator();
 export default class PaymentStack extends Component {
   render() {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen name="Bill" component={BillPage} />
         <Stack.Screen name="BillDetail" component={BillPage2} />
       </Stack.Navigator>

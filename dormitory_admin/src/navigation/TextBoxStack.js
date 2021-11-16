@@ -11,7 +11,10 @@ const Stack = createNativeStackNavigator();
 export default class TextBoxStack extends Component {
   render() {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen name="TextBoxScreen" component={TextBox} />
         <Stack.Screen name="TextCreate" component={TextBox2} />
       </Stack.Navigator>

@@ -25,7 +25,6 @@ export default class MainNavigate extends Component {
           tabBar={props => <TabBar {...props} />}
           screenOptions={{
             headerShown: false,
-           
           }}
           initialRouteName='Home'
           >

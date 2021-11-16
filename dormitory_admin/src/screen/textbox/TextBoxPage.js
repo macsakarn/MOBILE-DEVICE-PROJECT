@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 
 export default class TextBoxPage extends Component {
     render() {
         return (
             <View>
-                <Text> Text Box page </Text>
+                <Text> Text sdBox </Text>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({})
+
