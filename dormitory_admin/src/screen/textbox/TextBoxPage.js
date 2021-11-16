@@ -5,7 +5,7 @@ export default class TextBoxPage extends Component {
     render() {
         return (
             <View>
-                <Text> Text sdBox </Text>
+                <Text> Text Boxssss </Text>
             </View>
         )
     }
