@@ -7,17 +7,15 @@ export default class SettingText extends Component {
     super(props);
   }
   render() {
-    const {price, onPress, title} = this.props;
+    const {price, _onPress, title} = this.props;
     return (
-      <View style={styles.box}>
+      <TouchableOpacity style={styles.box} onPress={_onPress}>
         <View>
           <Text style={styles.font}>{title}</Text>
           <Text style={styles.fontEdit}>{price} Bath</Text>
         </View>
-        <TouchableOpacity>
-          <Image source={require('../assets/edit.png')} />
-        </TouchableOpacity>
-      </View>
+        <Image source={require('../assets/arrow.png')} />
+      </TouchableOpacity>
     );
   }
 }
@@ -28,6 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 0.2,
     paddingVertical: 10,
+    alignItems:'center'
   },
   font: {
     lineHeight: 22,

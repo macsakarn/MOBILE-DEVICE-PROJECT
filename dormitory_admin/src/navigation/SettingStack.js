@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import HomePage from '../screen/home/HomePage';
-import HomePage2 from '../screen/home/HomePage2';
+import SetPage from '../screen/setting/SetPage';
+import SetEdit from '../screen/setting/SetEdit';
+
 const Stack = createNativeStackNavigator();
-export default class HomeStack extends Component {
+
+export default class SettingStack extends Component {
   render() {
     return (
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="HomeScreen" component={HomePage} />
-        <Stack.Screen name="HomeDetail" component={HomePage2} />
+        <Stack.Screen name="SetPage" component={SetPage} />
+        <Stack.Screen name="SetEdit" component={SetEdit} />
       </Stack.Navigator>
     );
   }

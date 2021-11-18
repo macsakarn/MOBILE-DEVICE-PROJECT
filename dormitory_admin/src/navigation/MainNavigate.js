@@ -10,10 +10,11 @@ const Tab = createBottomTabNavigator();
 import HomeStack from './HomeStack';
 import PaymentStack from './PaymentStack';
 import TextBoxStack from './TextBoxStack';
+import SettingStack from './SettingStack';
 
 //Screen
 import CreatePage from '../screen/create/CreatePage';
-import SettingPage from '../screen/setting/SetPage';
+
 
 //Custom TabBar
 import TabBar from '../components/TabBar';
@@ -32,7 +33,7 @@ export default class MainNavigate extends Component {
           <Tab.Screen name="Create" component={CreatePage} />
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="TextBox" component={TextBoxStack} />
-          <Tab.Screen name="Settings" component={SettingPage} />
+          <Tab.Screen name="Settings" component={SettingStack} />
         </Tab.Navigator>
       </NavigationContainer>
     );
