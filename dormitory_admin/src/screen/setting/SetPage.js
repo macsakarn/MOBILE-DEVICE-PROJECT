@@ -14,8 +14,8 @@ const baseUrl = 'https://accounts-go-api.herokuapp.com';
 
 import Colors from '../../assets/color';
 
-import SettingText from '../../components/SettingText';
-import SettingAccount from '../../components/SettingAccount';
+import SettingText from '../../components/onlySetting/SettingText';
+import SettingAccount from '../../components/onlySetting/SettingAccount';
 export default class SetPage extends Component {
   constructor(props) {
     super(props);
@@ -163,4 +163,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.Dask,
   },
+  
 });

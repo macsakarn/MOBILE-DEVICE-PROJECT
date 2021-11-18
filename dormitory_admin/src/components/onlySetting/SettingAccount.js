@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View,TouchableOpacity,Image} from 'react-native';
 
-import Colors from '../assets/color';
+import Colors from '../../assets/color';
 
 export default class SettingAccount extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class SettingAccount extends Component {
           <Text style={styles.fontEdit}>{number}</Text>
         </View>
 
-          <Image source={require('../assets/arrow.png')} />
+          <Image source={require('../../assets/arrow.png')} />
 
       </TouchableOpacity>
     );

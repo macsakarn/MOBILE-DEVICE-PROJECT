@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 
-import Colors from '../assets/color';
+import Colors from '../../assets/color';
 export default class SettingText extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +14,7 @@ export default class SettingText extends Component {
           <Text style={styles.font}>{title}</Text>
           <Text style={styles.fontEdit}>{price} Bath</Text>
         </View>
-        <Image source={require('../assets/arrow.png')} />
+        <Image source={require('../../assets/arrow.png')} />
       </TouchableOpacity>
     );
   }
