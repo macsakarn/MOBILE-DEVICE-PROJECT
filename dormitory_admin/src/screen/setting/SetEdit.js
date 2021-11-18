@@ -12,14 +12,12 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import InfoEdit from '../../components/onlySetting/InfoEdit'
+import RateEdit from '../../components/onlySetting/RateEdit'
 
 import Colors from '../../assets/color';
 
 
 export default class SetEdit extends Component {
-  state = {}
-
-  componentDidMount() {}
 
   typeEdit(type, data,navigation) {
     if (type.name === 'info') {
@@ -27,7 +25,7 @@ export default class SetEdit extends Component {
             <InfoEdit data={data} navigation={navigation}/>
           );
     } else if (type.name === 'rate') {
-      return this.RateCompo(data, type.change);
+        return(<RateEdit data={data} navigation={navigation} type={type.change}/>)
     } else if (type.name === 'account') {
       return this.AccountCompo(data);
     }

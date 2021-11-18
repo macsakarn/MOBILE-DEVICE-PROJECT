@@ -156,7 +156,7 @@ export default class InfoEdit extends Component {
 
 const styles = StyleSheet.create({
   btn: {
-    backgroundColor: Colors.Yellow,
+    backgroundColor: Colors.Blue,
     alignSelf: 'stretch',
     justifyContent: 'center',
     height: 40,
