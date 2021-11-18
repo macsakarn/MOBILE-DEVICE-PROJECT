@@ -6,7 +6,8 @@ import {
   Dimensions,
   Image,
   ScrollView,
-  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 const baseUrl = 'https://accounts-go-api.herokuapp.com';
@@ -38,13 +39,25 @@ export default class SetPage extends Component {
       });
   }
 
-  Accounts(){
+  Accounts() {
     const {account} = this.state.accounts;
-    return account.map((item,index)=>{
-      return(
-        <SettingAccount name={item.name} number={item.number} key={index}/>
-      )
-    })
+    return account.map((item, index) => {
+      return (
+        <SettingAccount
+          name={item.name}
+          number={item.number}
+          key={index}
+          _onPress={() =>
+            this._handleBasic({name: 'account', change: item.id}, item)
+          }
+        />
+      );
+    });
+  }
+
+  _handleBasic(type, data) {
+    const {navigation} = this.props;
+    navigation.navigate('SetEdit', {type, data});
   }
 
   render() {
@@ -59,15 +72,22 @@ export default class SetPage extends Component {
     } else {
       const {info} = this.state;
       const address = info.address.split('อำเภอ');
-      
+
       return (
         <View style={styles.container}>
+          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <ScrollView>
             <View style={styles.section}>
               <Text style={styles.headder}>Setting</Text>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Image source={require('../../assets/image/home.png')} />
+              <TouchableOpacity
+                onPress={() => {
+                  this._handleBasic({name: 'info', change: 'profile'}, info);
+                }}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
                 <View>
                   <Text style={[styles.font, {fontWeight: 'bold'}]}>
                     {info.name}
@@ -76,19 +96,31 @@ export default class SetPage extends Component {
                   <Text style={styles.font}>{address[0]}</Text>
                   <Text style={styles.font}>อำเภอ{address[1]}</Text>
                 </View>
-                <Image source={require('../../assets/edit.png')} />
-              </View>
+                <Image source={require('../../assets/arrow.png')} />
+              </TouchableOpacity>
             </View>
             <View style={styles.section}>
               <Text style={styles.samiHeadder}>Service Rate</Text>
               <SettingText
                 price={info.electricityBill}
                 title="Electricity Tariff / Unit"
+                _onPress={() =>
+                  this._handleBasic({name: 'rate', change: 'ele'}, info)
+                }
               />
-              <SettingText price={info.waterBill} title="Water Tariff / Unit" />
+              <SettingText
+                price={info.waterBill}
+                title="Water Tariff / Unit"
+                _onPress={() =>
+                  this._handleBasic({name: 'rate', change: 'wat'}, info)
+                }
+              />
               <SettingText
                 price={info.servicePerDate}
                 title="Daily Service Rate"
+                _onPress={() =>
+                  this._handleBasic({name: 'rate', change: 'dail'}, info)
+                }
               />
             </View>
             <View style={[styles.section, {marginBottom: 100}]}>
@@ -101,8 +133,8 @@ export default class SetPage extends Component {
     }
   }
 }
-const {width} = Dimensions.get('screen');
 
+const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.BG,
