@@ -3,8 +3,8 @@ import {Text, View} from 'react-native';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import TextBox from '../screen/textbox/TextBoxPage';
-import TextBox2 from '../screen/textbox/TextBoxPage2';
+import TextBox from '../screen/textbox/TextBoxPage'; //All message
+import TextBox2 from '../screen/textbox/TextBoxPage2';//Create Message
 
 const Stack = createNativeStackNavigator();
 
