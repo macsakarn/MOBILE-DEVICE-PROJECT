@@ -54,10 +54,11 @@ export default showAnnounce = (props) => {
       </View>
       <View style={styles.compAllbox}>
         <FlatList
+          numColumns={1}
           data={props.announcesDB.reverse()}
           keyExtractor={props.announcesDB._id}
           renderItem={msgBox}
-          showsVerticalScrollIndicator={true}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </View>
@@ -100,10 +101,9 @@ const styles = StyleSheet.create({
   compAllbox: {
     flexDirection: 'column',
     // borderWidth:1,
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
+    marginVertical:10,
+    marginHorizontal: 20,
+    
     flex: 8,
   },
   msg: {
