@@ -6,8 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  TextInput,
-  ScrollView,
+
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -60,11 +59,6 @@ export default class SetEdit extends Component {
     );
   }
 
-  RateCompo(data, change) {
-    console.log('RateCompo DATA : ', data);
-    console.log('RateCompo DATA : ', change);
-    return <Text>Rate is now</Text>;
-  }
   AccountCompo(data) {
     console.log('AccountCompo DATA : ', data);
     return <Text>Account is now</Text>;

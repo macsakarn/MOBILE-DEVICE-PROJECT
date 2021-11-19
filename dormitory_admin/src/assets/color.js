@@ -5,5 +5,6 @@ export default  {
   Green: '#2CCE03',
   BG: '#EBEBEB',
   White: '#fff',
+  Gray:'#bababa'
 
 };
