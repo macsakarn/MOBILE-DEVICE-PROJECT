@@ -143,8 +143,10 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: Colors.White,
     width,
-    padding: 20,
+    paddingBottom:20,
+    paddingHorizontal:20,
     marginBottom: 10,
+    paddingTop: StatusBar.currentHeight || 0,
   },
   font: {
     lineHeight: 22,

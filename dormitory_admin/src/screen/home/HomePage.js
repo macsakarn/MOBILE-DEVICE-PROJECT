@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  SafeAreaView 
 } from 'react-native';
 
 import Colors from '../../assets/color';
@@ -15,33 +16,6 @@ import Colors from '../../assets/color';
 import BoxHome from '../../components/onlyHome/BoxHome';
 import FloorBox from '../../components/onlyHome/FloorBox';
 import Room from '../../components/onlyHome/Room';
-
-DATA = [
-  {
-    roomId: 'A001',
-  },
-  {
-    roomId: 'A002',
-  },
-  {
-    roomId: 'A003',
-  },
-  {
-    roomId: 'A104',
-  },
-  {
-    roomId: 'A205',
-  },
-  {
-    roomId: 'A306',
-  },
-  {
-    roomId: 'A407',
-  },
-  {
-    roomId: 'A008',
-  },
-];
 
 import axios from 'axios';
 const baseUrl = 'https://horchana-room-services.herokuapp.com/api';
@@ -55,17 +29,19 @@ export default class HomePage extends Component {
     selectFloor: 1,
   };
   async componentDidMount() {
-    let floor1 = [],
+    var floor1 = [],
       floor2 = [],
       floor3 = [],
       floor4 = [],
-      floor5 = [];
-    axios({
-      method: 'get',
-      url: `${baseUrl}/room/get/roomidlist`,
-    }).then((response) => {
-      console.log(response.data);
-    });
+      floor5 = [],
+      DATA = [];
+    try {
+      const resp = await axios.get(`${baseUrl}/room/get/roomidlist`);
+      DATA = resp.data
+    } catch (err) {
+      // Handle Error Here
+      console.error(err);
+    }
 
     DATA.map(item => {
       if (item.roomId[1] == '0') floor1.push(item);
@@ -87,7 +63,7 @@ export default class HomePage extends Component {
     this.setState({selectFloor: floor});
   };
 
-  renderRoom() {
+  render() {
     let data;
     if (this.state.selectFloor == 1) data = this.state.floor1;
     else if (this.state.selectFloor == 2) data = this.state.floor2;
@@ -96,17 +72,19 @@ export default class HomePage extends Component {
     else data = this.state.floor5;
     return (
       <FlatList
-        columnWrapperStyle={{justifyContent: 'space-between'}}
+        columnWrapperStyle={styles.colContainer}
         data={data}
         renderItem={data => this.renderItem(data)}
         numColumns={2}
+        ListHeaderComponent={this.headder()}
+        ListFooterComponent={()=><View style={{height:100}}></View>}
       />
     );
   }
 
-  render() {
+  headder() {
     return (
-      <View style={styles.container}>
+      <View  style={styles.container}>
         <View style={styles.section}>
           <Text>Hello</Text>
           <Text style={styles.headder}>Mac Sakarn</Text>
@@ -131,7 +109,7 @@ export default class HomePage extends Component {
             <BoxHome />
           </View>
         </View>
-        <View style={styles.section}>
+        <View style={[styles.section,{marginBottom:0}]}>
           <View style={styles.searchBox}>
             <Image
               source={require('../../assets/search.png')}
@@ -174,7 +152,7 @@ export default class HomePage extends Component {
               selected={this.state.selectFloor}
             />
           </View>
-          <View>{this.renderRoom()}</View>
+        
         </View>
       </View>
     );
@@ -221,4 +199,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: '#424242',
   },
+  colContainer:{
+    backgroundColor: Colors.White,
+    width,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between'
+  }
+
 });

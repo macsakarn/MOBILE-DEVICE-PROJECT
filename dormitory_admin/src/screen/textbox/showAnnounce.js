@@ -59,6 +59,7 @@ export default showAnnounce = (props) => {
           keyExtractor={props.announcesDB._id}
           renderItem={msgBox}
           showsVerticalScrollIndicator={false}
+          ListFooterComponent={()=><View style={{height:200}}></View>}
         />
       </View>
     </View>

@@ -7,7 +7,14 @@ export default class Room extends Component {
     super(props);
   }
   render() {
-    const {title, name="wowza", tel="00-00", electric=100, water=100} = this.props;
+    const {
+      title,
+      name = 'wowza',
+      tel = '00-00',
+      electric = 100,
+      water = 100,
+      
+    } = this.props;
     return (
       <TouchableOpacity style={styles.container}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -18,7 +25,12 @@ export default class Room extends Component {
         </View>
         <Text style={{fontSize: 12}}>{name}</Text>
         <Text style={{fontSize: 12}}>{tel}</Text>
-        <View style={{flexDirection: 'row',justifyContent:'space-around',marginVertical:4}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginVertical: 4,
+          }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={require('../../assets/Bolt.png')}

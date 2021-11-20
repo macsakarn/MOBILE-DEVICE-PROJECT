@@ -6,7 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-
+  StatusBar
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -48,10 +48,11 @@ export default class SetEdit extends Component {
               alignItems: 'center',
             },
           ]}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{flex:1}}>
             <Image source={require('../../assets/chevron.png')} />
           </TouchableOpacity>
           <Text style={styles.headder}>Edit Info</Text>
+          <View style={{flex:1}}></View>
         </View>
         <View style={styles.section}>{this.typeEdit(type, data,navigation)}</View>
         <View style={{height: 60}} />
@@ -76,8 +77,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.White,
     width,
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingBottom: 30,
     marginBottom: 10,
+    paddingTop: StatusBar.currentHeight || 0,
   },
   headder: {
     fontSize: 20,
