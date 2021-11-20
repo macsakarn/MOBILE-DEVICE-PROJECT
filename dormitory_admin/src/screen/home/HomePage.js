@@ -7,7 +7,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   FlatList,
 } from 'react-native';
 
@@ -17,7 +16,7 @@ import BoxHome from '../../components/onlyHome/BoxHome';
 import FloorBox from '../../components/onlyHome/FloorBox';
 import Room from '../../components/onlyHome/Room';
 
-const DATA = [
+DATA = [
   {
     roomId: 'A001',
   },
@@ -31,19 +30,21 @@ const DATA = [
     roomId: 'A104',
   },
   {
-    roomId: 'A105',
+    roomId: 'A205',
   },
   {
-    roomId: 'A106',
+    roomId: 'A306',
   },
   {
-    roomId: 'A107',
+    roomId: 'A407',
   },
   {
-    roomId: 'A208',
+    roomId: 'A008',
   },
 ];
 
+import axios from 'axios';
+const baseUrl = 'https://horchana-room-services.herokuapp.com/api';
 export default class HomePage extends Component {
   state = {
     floor1: [],
@@ -53,12 +54,19 @@ export default class HomePage extends Component {
     floor5: [],
     selectFloor: 1,
   };
-  componentDidMount() {
-    let floor1 = [];
-    let floor2 = [];
-    let floor3 = [];
-    let floor4 = [];
-    let floor5 = [];
+  async componentDidMount() {
+    let floor1 = [],
+      floor2 = [],
+      floor3 = [],
+      floor4 = [],
+      floor5 = [];
+    axios({
+      method: 'get',
+      url: `${baseUrl}/room/get/roomidlist`,
+    }).then((response) => {
+      console.log(response.data);
+    });
+
     DATA.map(item => {
       if (item.roomId[1] == '0') floor1.push(item);
       if (item.roomId[1] == '1') floor2.push(item);
@@ -88,6 +96,7 @@ export default class HomePage extends Component {
     else data = this.state.floor5;
     return (
       <FlatList
+        columnWrapperStyle={{justifyContent: 'space-between'}}
         data={data}
         renderItem={data => this.renderItem(data)}
         numColumns={2}
@@ -165,19 +174,13 @@ export default class HomePage extends Component {
               selected={this.state.selectFloor}
             />
           </View>
-          <View>
-              {this.renderRoom()}
-          </View>
+          <View>{this.renderRoom()}</View>
         </View>
       </View>
     );
   }
   renderItem = ({item}) => {
-    return (
-      <View>
-        <Text>{item.roomId}</Text>
-      </View>
-    );
+    return <Room title={item.roomId} />;
   };
 }
 
