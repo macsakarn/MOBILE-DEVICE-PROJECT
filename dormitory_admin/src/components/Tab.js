@@ -21,8 +21,8 @@ export default class Tab extends Component {
       );
     } else {
       return (
-        <View
-          style={{width: 35, height: 5, borderRadius: 30, marginTop: 4}}></View>
+        <View style={{width: 35,
+          height: 5,}}></View>
       );
     }
   }
