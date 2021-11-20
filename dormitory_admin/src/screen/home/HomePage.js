@@ -89,7 +89,7 @@ export default class HomePage extends Component {
     return (
       <View>
         <View style={styles.section}>
-          <Text>Hello</Text>
+          <Text>Hey</Text>
           <Text style={styles.headder}>Mac Sakarn</Text>
           <View
             style={{
