@@ -27,8 +27,8 @@ export default class SetPage extends Component {
 
   async componentDidMount() {
     const concurrentRequests = [
-      axios.get(`${baseUrl}/owner/info`),
-      axios.get(`${baseUrl}/owner/account`),
+      axios.get(`https://accounts-go-api.herokuapp.com/owner/info`),
+      axios.get(`https://accounts-go-api.herokuapp.com/owner/account`),
     ];
     Promise.all(concurrentRequests)
       .then(result => {
