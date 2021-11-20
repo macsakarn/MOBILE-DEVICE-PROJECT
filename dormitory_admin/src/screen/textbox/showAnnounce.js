@@ -6,7 +6,7 @@ import {
   FlatList,
   Dimensions,
   TouchableOpacity,
-  Image,
+  StatusBar,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../assets/color';
@@ -46,9 +46,7 @@ export default showAnnounce = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={{flex: 1}}></View>
-        <View style={{flex: 1}}></View>
-        <View style={{flex: 1}}></View>
+        <View style={{flex: 0.5}}></View>
         <Text style={styles.label}>Announcements</Text>
         {createBtn}
       </View>
@@ -76,28 +74,26 @@ const styles = StyleSheet.create({
     // height
   },
   header: {
-    paddingVertical: 30,
+    paddingBottom: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: StatusBar.currentHeight || 0,
   },
   label: {
     fontSize: 20,
     fontWeight: 'bold',
     color: Colors.Dask,
     textAlign: 'center',
-    flex: 4,
-    // borderWidth: 1,
+    flex: 1,
   },
   btnCreateMSG: {
-    flex: 2,
+    flex: 0.5,
     width: 45,
     height: 35,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
-    marginRight: 10,
   },
   compAllbox: {
     flexDirection: 'column',

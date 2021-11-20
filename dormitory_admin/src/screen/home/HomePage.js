@@ -8,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  SafeAreaView 
+  StatusBar,
+  SafeAreaView
 } from 'react-native';
 
 import Colors from '../../assets/color';
@@ -37,7 +38,7 @@ export default class HomePage extends Component {
       DATA = [];
     try {
       const resp = await axios.get(`${baseUrl}/room/get/roomidlist`);
-      DATA = resp.data
+      DATA = resp.data;
     } catch (err) {
       // Handle Error Here
       console.error(err);
@@ -71,20 +72,22 @@ export default class HomePage extends Component {
     else if (this.state.selectFloor == 4) data = this.state.floor4;
     else data = this.state.floor5;
     return (
-      <FlatList
-        columnWrapperStyle={styles.colContainer}
-        data={data}
-        renderItem={data => this.renderItem(data)}
-        numColumns={2}
-        ListHeaderComponent={this.headder()}
-        ListFooterComponent={()=><View style={{height:100}}></View>}
-      />
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          columnWrapperStyle={styles.colContainer}
+          data={data}
+          renderItem={data => this.renderItem(data)}
+          numColumns={2}
+          ListHeaderComponent={this.headder()}
+          ListFooterComponent={() => <View style={{height: 100}}></View>}
+        />
+      </SafeAreaView>
     );
   }
 
   headder() {
     return (
-      <View  style={styles.container}>
+      <View>
         <View style={styles.section}>
           <Text>Hello</Text>
           <Text style={styles.headder}>Mac Sakarn</Text>
@@ -109,7 +112,7 @@ export default class HomePage extends Component {
             <BoxHome />
           </View>
         </View>
-        <View style={[styles.section,{marginBottom:0}]}>
+        <View style={[styles.section, {marginBottom: 0}]}>
           <View style={styles.searchBox}>
             <Image
               source={require('../../assets/search.png')}
@@ -152,7 +155,6 @@ export default class HomePage extends Component {
               selected={this.state.selectFloor}
             />
           </View>
-        
         </View>
       </View>
     );
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 10,
     paddingBottom: 5,
-    paddingTop: 20,
+    paddingTop: StatusBar.currentHeight || 0,
   },
   headder: {
     fontSize: 20,
@@ -199,11 +201,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: '#424242',
   },
-  colContainer:{
+  colContainer: {
     backgroundColor: Colors.White,
     width,
     paddingHorizontal: 20,
-    justifyContent: 'space-between'
-  }
-
+    justifyContent: 'space-between',
+  },
 });
