@@ -39,7 +39,7 @@ export default function CreatePage() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.hd_txt}>Add new resident </Text>
-        <Text style={styles.hd_txt_TH}>เพิ่มผู้เช่าคนใหม่</Text>
+        {/* <Text style={styles.hd_txt_TH}>เพิ่มผู้เช่าคนใหม่</Text> */}
       </View>
       <View style={styles.content}>
         {/* Input content */}
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   hd_txt_TH: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: Colors.Gray,
+    color: 'gray',
     textAlign: 'center',
     // borderWidth: 1,
     marginTop: 8,
