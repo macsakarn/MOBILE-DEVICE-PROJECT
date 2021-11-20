@@ -1,39 +1,43 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 
 import Colors from '../../assets/color';
+import Room from '../../components/onlyHome/Room';
+
+import axios from 'axios';
+const baseUrl = 'https://horchana-room-services.herokuapp.com/api';
 
 export default function CreatePage() {
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [phone, setPhone] = useState('');
+  const [roomID_db, setRoomID] = useState(null);
 
-  const DATA = [
-    {
-      roomId: 'A001',
-    },
-    {
-      roomId: 'A002',
-    },
-    {
-      roomId: 'A003',
-    },
-    {
-      roomId: 'A104',
-    },
-    {
-      roomId: 'A105',
-    },
-    {
-      roomId: 'A106',
-    },
-    {
-      roomId: 'A107',
-    },
-    {
-      roomId: 'A208',
-    },
-  ];
+  useEffect(() => {
+    const getDB = async () => {
+      try {
+        await axios.get(`${baseUrl}/room/get/roomidlist`).then(resp => {
+          const db = resp.data;
+          setRoomID(db);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getDB();
+    console.log(roomID_db);
+  }, []);
+  renderItem = ({item}) => {
+    return <Room title={item.roomId} />;
+  };
 
   return (
     <View style={styles.container}>
@@ -88,13 +92,22 @@ export default function CreatePage() {
         <View style={{flexDirection: 'column', borderWidth: 1, marginTop: 20}}>
           <Text style={styles.roomID_Label}>Room ID</Text>
           {/* Room ID Table */}
-          <View style={styles.roomID_Table}></View>
+          <View style={styles.roomID_Table}>
+            <FlatList
+              columnWrapperStyle={styles.colContainer}
+              data={roomID_db}
+              renderItem={data => renderItem(data)}
+              numColumns={2}
+              // ListHeaderComponent={this.headder()}
+              // ListFooterComponent={() => <View style={{height: 100}}></View>}
+            />
+          </View>
         </View>
         {/* Button 'Create' */}
         <View style={{borderWidth: 1, marginTop: 20}}>
           <TouchableOpacity
             onPress={() => {
-              confirmationAlert();
+              // confirmationAlert();
             }}
             style={styles.btn}>
             <Text
@@ -112,7 +125,7 @@ export default function CreatePage() {
     </View>
   );
 }
-
+const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
@@ -178,5 +191,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 40,
     borderRadius: 30,
+  },
+  colContainer: {
+    backgroundColor: Colors.White,
+    width,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
   },
 });
