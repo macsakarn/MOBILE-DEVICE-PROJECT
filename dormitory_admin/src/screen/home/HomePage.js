@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
   Text,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   StatusBar,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 
 import Colors from '../../assets/color';
@@ -160,8 +160,18 @@ export default class HomePage extends Component {
     );
   }
   renderItem = ({item}) => {
-    return <Room title={item.roomId} />;
+    return (
+      <Room
+        title={item.roomId}
+        onPress={() => this._headderNavigate(item.roomId)}
+      />
+    );
   };
+
+  _headderNavigate(id) {
+    const {navigation} = this.props;
+    navigation.navigate('HomeDetail', {id});
+  }
 }
 
 const {width} = Dimensions.get('screen');

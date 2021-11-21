@@ -13,10 +13,10 @@ export default class Room extends Component {
       tel = '00-00',
       electric = 100,
       water = 100,
-      
+      onPress
     } = this.props;
     return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={{fontWeight: 'bold', fontSize: 18, color: Colors.Dask}}>
             {title}
