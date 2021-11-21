@@ -17,7 +17,7 @@ export default class Detail extends Component {
             paddingVertical: 10,
           }}>
           <Text style={{fontSize: 16, color: Colors.Gray}}>{title}</Text>
-          <Text style={{fontSize: 16, color: Colors.Blue}}>{value}</Text>
+          <Text style={{fontSize: 16, color: Colors.Blue}}>{!value?"-":value}</Text>
         </View>
       );
     } else {

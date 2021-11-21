@@ -21,7 +21,7 @@ export default class Room extends Component {
           <Text style={{fontWeight: 'bold', fontSize: 18, color: Colors.Dask}}>
             {title}
           </Text>
-          <View style={[styles.status, {backgroundColor: Colors.Dask}]}></View>
+          <View style={[styles.status, {backgroundColor:!name?null: Colors.Dask}]}></View>
         </View>
         <Text style={{fontSize: 12}}>{name}</Text>
         <Text style={{fontSize: 12}}>{tel}</Text>

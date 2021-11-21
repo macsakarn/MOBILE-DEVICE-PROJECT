@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import {
   Text,
   StyleSheet,
@@ -29,16 +29,24 @@ export default class HomePage extends Component {
     floor5: [],
     selectFloor: 1,
   };
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+
   async componentDidMount() {
-    var floor1 = [],
+    const {navigation} = this.props
+    this._unsubscribe = navigation.addListener('focus', async () => {
+      var floor1 = [],
       floor2 = [],
       floor3 = [],
       floor4 = [],
       floor5 = [],
       DATA = [];
     try {
-      const resp = await axios.get(`${baseUrl}/room/get/roomidlist`);
-      DATA = resp.data;
+      const resp = await axios.get(`${baseUrl}/room/get/allroomsdata`);
+      DATA = resp.data.roomsData;
     } catch (err) {
       // Handle Error Here
       console.error(err);
@@ -58,6 +66,7 @@ export default class HomePage extends Component {
       floor4,
       floor5,
     });
+    });
   }
 
   _headderSelect = floor => {
@@ -71,6 +80,7 @@ export default class HomePage extends Component {
     else if (this.state.selectFloor == 3) data = this.state.floor3;
     else if (this.state.selectFloor == 4) data = this.state.floor4;
     else data = this.state.floor5;
+    const {navigation} = this.props
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -81,6 +91,9 @@ export default class HomePage extends Component {
           ListHeaderComponent={this.headder()}
           ListFooterComponent={() => <View style={{height: 100}}></View>}
         />
+        <TouchableOpacity style={styles.btn} activeOpacity={.9} onPress={()=>navigation.navigate('CreateRoom')}>
+          <Image source={require('../../assets/plus2.png')} />
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -159,18 +172,28 @@ export default class HomePage extends Component {
       </View>
     );
   }
+
   renderItem = ({item}) => {
     return (
       <Room
         title={item.roomId}
-        onPress={() => this._headderNavigate(item.roomId)}
+        name={item.resident_info.name}
+        tel={item.resident_info.tel}
+        onPress={() => this._headderNavigate(item)}
       />
     );
   };
 
-  _headderNavigate(id) {
+  _headderNavigate(item) {
     const {navigation} = this.props;
-    navigation.navigate('HomeDetail', {id});
+    let data = {
+      room:item.roomId,
+      roomPrice:item.room_price,
+      name:item.resident_info.name,
+      tel:item.resident_info.tel,
+      password:item.resident_info.password
+    }
+    navigation.navigate('HomeDetail',data);
   }
 }
 
@@ -216,5 +239,24 @@ const styles = StyleSheet.create({
     width,
     paddingHorizontal: 20,
     justifyContent: 'space-between',
+  },
+  btn: {
+    height: 75,
+    width: 75,
+    backgroundColor: Colors.White,
+    position: 'absolute',
+    bottom: 80,
+    right: 10,
+    borderRadius: 99,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
+    justifyContent:'center',
+    alignItems:'center'
   },
 });
