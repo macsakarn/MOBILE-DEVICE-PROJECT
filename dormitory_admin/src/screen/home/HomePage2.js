@@ -33,7 +33,9 @@ export default class HomePage2 extends Component {
               <Image source={require('../../assets/chevron.png')} />
             </TouchableOpacity>
             <Text style={styles.headder}>ROOM DETAILS</Text>
-            <View style={{flex: 0.5}}></View>
+            <TouchableOpacity style={{flex: 0.5}} onPress={()=>this.removeRoom()}>
+              <Text style={{textAlign:'right',color:"#fe0000"}}>DELETE</Text>
+            </TouchableOpacity>
           </View>
           <View style={{alignItems: 'center'}}>
             <Text
@@ -128,12 +130,40 @@ export default class HomePage2 extends Component {
     );
   }
 
-  async _headderremove(){
+  removeRoom(){
+    Alert.alert(
+      "Remove Room",
+      "Do you want to remove Room?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "OK", onPress: () =>  this._headderRemoveRoom()}
+      ]
+    );
+  }
+
+  async _headderRemove(){
     const {navigation, route} = this.props;
     const {room} = route.params;
     console.log(room);
     try {
       const resp = await axios.delete(`${baseUrl}/room/removeperson/${room}`);
+      if(resp.data.msg){
+        navigation.popToTop()
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async _headderRemoveRoom(){
+    const {navigation, route} = this.props;
+    const {room} = route.params;
+    console.log(room);
+    try {
+      const resp = await axios.delete(`${baseUrl}/room/removeroom/${room}`);
       if(resp.data.msg){
         navigation.popToTop()
       }
