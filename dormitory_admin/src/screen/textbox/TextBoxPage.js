@@ -18,9 +18,9 @@ export default function TextBoxPage({navigation}) {
 
   useEffect(() => {
     getDB();
-  }, []);
+  }, [announcesDB]);
 
-  let content = <ShowAnnounces navigation={navigation} announcesDB={announcesDB} />;
+let content = <ShowAnnounces navigation={navigation} announcesDB={announcesDB} />;
 
   return (
       <View style={styles.container}>{content}</View>
