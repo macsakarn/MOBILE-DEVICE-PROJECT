@@ -8,6 +8,7 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 
 export default class login extends Component {
@@ -49,7 +50,6 @@ export default class login extends Component {
             </TouchableOpacity>
           </View>
         </View>
-          <Image source={require('../assets/login/footbg.png')} style={{backgroundColor:'#fff',width}}/>
       </View>
     );
   }
@@ -58,9 +58,8 @@ export default class login extends Component {
 const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    flex:1,
     backgroundColor: '#ebebeb',
-    alignItems: 'center',
     paddingTop: StatusBar.currentHeight || 0,
   },
   section: {
