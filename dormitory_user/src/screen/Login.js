@@ -13,6 +13,9 @@ import {
 
 export default class login extends Component {
   render() {
+    const {onPress,
+      handleId,
+      handlePass} = this.props
     return (
       <View style={styles.screen}>
         <Image source={require('../assets/login/bg.png')} />
@@ -23,7 +26,7 @@ export default class login extends Component {
             <View style={styles.searchBox}>
               <TextInput
                 placeholder="Your room id"
-                // onChangeText={name => this.setState({name})}
+                onChangeText={id => handleId(id)}
               />
             </View>
             <Text style={styles.midFont}>Password</Text>
@@ -32,12 +35,12 @@ export default class login extends Component {
                 placeholder="Password"
                 secureTextEntry={true}
                 keyboardType="numeric"
-                // onChangeText={name => this.setState({name})}
+                onChangeText={pass => handlePass(pass)}
               />
             </View>
             <TouchableOpacity
               style={styles.btn}
-              onPress={() => this._headderAPI(room)}>
+              onPress={onPress}>
               <Text
                 style={{
                   color: '#fff',

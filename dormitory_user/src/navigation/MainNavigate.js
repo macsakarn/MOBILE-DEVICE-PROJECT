@@ -15,6 +15,7 @@ import TabBar from '../components/TabBar';
 
 export default class MainNavigate extends Component {
   render() {
+    const {user} = this.props
     return (
       <NavigationContainer>
         <Tab.Navigator
@@ -23,11 +24,11 @@ export default class MainNavigate extends Component {
             headerShown: false,
           }}
           initialRouteName="HomePage">
-          <Tab.Screen name="RecordBill" component={RecordBill} />
-          <Tab.Screen name="UploadBill" component={UploadBill} />
-          <Tab.Screen name="HomePage" component={HomePage} initialParams={{ itemId: 42 }}/>
-          <Tab.Screen name="TextBoxPage" component={TextBoxPage} />
-          <Tab.Screen name="SettingPage" component={SettingPage} />
+          <Tab.Screen name="RecordBill" component={RecordBill} initialParams={{user}}/>
+          <Tab.Screen name="UploadBill" component={UploadBill} initialParams={{user}}/>
+          <Tab.Screen name="HomePage" component={HomePage} initialParams={{user}}/>
+          <Tab.Screen name="TextBoxPage" component={TextBoxPage} initialParams={{user}}/>
+          <Tab.Screen name="SettingPage" component={SettingPage} initialParams={{user}}/>
         </Tab.Navigator>
       </NavigationContainer>
     );
