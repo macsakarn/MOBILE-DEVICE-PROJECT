@@ -25,31 +25,38 @@ export default class SetPage extends Component {
     accounts: null,
   };
 
-  async componentDidMount() {
-    const concurrentRequests = [
-      axios.get(`https://accounts-go-api.herokuapp.com/owner/info`),
-      axios.get(`https://accounts-go-api.herokuapp.com/owner/account`),
-    ];
-    Promise.all(concurrentRequests)
-      .then(result => {
-        this.setState({info: result[0].data, accounts: result[1].data});
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  componentDidMount() {
+    const {navigation} = this.props;
+    this._unsubscribe = navigation.addListener('focus', async () => {
+      const concurrentRequests = [
+        axios.get(`${baseUrl}/owner/info`),
+        axios.get(`${baseUrl}/owner/account`),
+      ];
+      Promise.all(concurrentRequests)
+        .then(result => {
+          this.setState({info: result[0].data, accounts: result[1].data});
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
   }
 
   Accounts() {
+    const {navigation} = this.props;
     const {account} = this.state.accounts;
+
     return account.map((item, index) => {
       return (
         <SettingAccount
           name={item.name}
           number={item.number}
           key={index}
-          _onPress={() =>
-            this._handleBasic({name: 'account', change: item.id}, item)
-          }
+          _onPress={() => navigation.navigate('SetAccount', {item})}
         />
       );
     });
@@ -71,8 +78,9 @@ export default class SetPage extends Component {
       );
     } else {
       const {info} = this.state;
+      const {account} = this.state.accounts;
+      const {navigation} = this.props;
       const address = info.address.split('อำเภอ');
-
       return (
         <View style={styles.container}>
           <StatusBar backgroundColor="#fff" barStyle="dark-content" />
@@ -100,7 +108,13 @@ export default class SetPage extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.section}>
-              <Text style={styles.samiHeadder}>Service Rate</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={require('../../assets/file_blank_fill.png')}
+                  style={{margin: 4}}
+                />
+                <Text style={styles.samiHeadder}>Service Rate</Text>
+              </View>
               <SettingText
                 price={info.electricityBill}
                 title="Electricity Tariff / Unit"
@@ -124,7 +138,29 @@ export default class SetPage extends Component {
               />
             </View>
             <View style={[styles.section, {marginBottom: 100}]}>
-              <Text style={styles.samiHeadder}>Account</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../assets/payment.png')}
+                    style={{margin: 4}}
+                  />
+                  <Text style={styles.samiHeadder}>Account</Text>
+                </View>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('CreateAccount', {
+                      last:  account.length != 0 ? account[account.length - 1].id: 1,
+                    })
+                  }>
+                  <Image source={require('../../assets/plus2.png')} />
+                </TouchableOpacity>
+              </View>
               {this.Accounts()}
             </View>
           </ScrollView>
@@ -143,8 +179,8 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: Colors.White,
     width,
-    paddingBottom:20,
-    paddingHorizontal:20,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
     marginBottom: 10,
     paddingTop: StatusBar.currentHeight || 0,
   },
@@ -165,5 +201,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.Dask,
   },
-  
 });

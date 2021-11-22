@@ -110,7 +110,7 @@ export default class HomePage2 extends Component {
           style={styles.btn}
           activeOpacity={0.9}
           onPress={() => this.removeHuman()}>
-          <Image source={require('../../assets/person_remove.png')} />
+          <Image source={require('../../assets/person_remove.png')} style={{tintColor:"#fe0000"}} />
         </TouchableOpacity>
       )
     }
