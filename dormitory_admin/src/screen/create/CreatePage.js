@@ -47,7 +47,7 @@ export default function CreatePage() {
       </View>
       <View style={styles.content}>
         {/* Input content */}
-        <View style={{flexDirection: 'column', borderWidth: 1}}>
+        <View style={{flexDirection: 'column'}}>
           {/* fl Label */}
           <View style={{flexDirection: 'row'}}>
             <Text style={[{marginRight: 4}, styles.flname_phon_Label]}>
@@ -89,7 +89,7 @@ export default function CreatePage() {
           </View>
         </View>
         {/* Room ID content */}
-        <View style={{flexDirection: 'column', borderWidth: 1, marginTop: 20}}>
+        <View style={{flexDirection: 'column',  marginTop: 10}}>
           <Text style={styles.roomID_Label}>Room ID</Text>
           {/* Room ID Table */}
           <View style={styles.roomID_Table}>
@@ -131,14 +131,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
     flex: 1,
-    borderWidth: 1,
-    borderColor: 'red',
   },
   header: {
     paddingVertical: 30,
     flexDirection: 'column',
     alignItems: 'center',
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   hd_txt: {
     fontSize: 20,
@@ -157,7 +155,7 @@ const styles = StyleSheet.create({
   },
   content: {
     marginHorizontal: 20,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'blue',
     flexDirection: 'column',
   },
