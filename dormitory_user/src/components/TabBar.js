@@ -55,11 +55,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     bottom: 0,
-    
   },
   tabBtn: {
     flex: 1,
     flexDirection: 'row',
-    
   },
 });

@@ -25,7 +25,7 @@ export default class MainNavigate extends Component {
           initialRouteName="HomePage">
           <Tab.Screen name="RecordBill" component={RecordBill} />
           <Tab.Screen name="UploadBill" component={UploadBill} />
-          <Tab.Screen name="HomePage" component={HomePage} />
+          <Tab.Screen name="HomePage" component={HomePage} initialParams={{ itemId: 42 }}/>
           <Tab.Screen name="TextBoxPage" component={TextBoxPage} />
           <Tab.Screen name="SettingPage" component={SettingPage} />
         </Tab.Navigator>
