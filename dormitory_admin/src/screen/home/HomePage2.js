@@ -125,7 +125,7 @@ export default class HomePage2 extends Component {
           text: "Cancel",
           style: "cancel"
         },
-        { text: "OK", onPress: () =>  this._headderremove()}
+        { text: "OK", onPress: () =>  this._headderRemove()}
       ]
     );
   }
