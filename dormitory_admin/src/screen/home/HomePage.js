@@ -28,12 +28,12 @@ export default class HomePage extends Component {
     floor4: [],
     floor5: [],
     selectFloor: 1,
+    data:[]
   };
 
   componentWillUnmount() {
     this._unsubscribe();
   }
-
 
   async componentDidMount() {
     const {navigation} = this.props
@@ -65,6 +65,7 @@ export default class HomePage extends Component {
       floor3,
       floor4,
       floor5,
+      data:DATA
     });
     });
   }
@@ -79,7 +80,7 @@ export default class HomePage extends Component {
     else if (this.state.selectFloor == 2) data = this.state.floor2;
     else if (this.state.selectFloor == 3) data = this.state.floor3;
     else if (this.state.selectFloor == 4) data = this.state.floor4;
-    else data = this.state.floor5;
+    else if (this.state.selectFloor == 5) data = this.state.floor5;
     const {navigation} = this.props
     return (
       <SafeAreaView style={styles.container}>
@@ -174,6 +175,7 @@ export default class HomePage extends Component {
   }
 
   renderItem = ({item}) => {
+    
     return (
       <Room
         title={item.roomId}
@@ -186,14 +188,7 @@ export default class HomePage extends Component {
 
   _headderNavigate(item) {
     const {navigation} = this.props;
-    let data = {
-      room:item.roomId,
-      roomPrice:item.room_price,
-      name:item.resident_info.name,
-      tel:item.resident_info.tel,
-      password:item.resident_info.password
-    }
-    navigation.navigate('HomeDetail',data);
+    navigation.navigate('HomeDetail',{room:item.roomId});
   }
 }
 
