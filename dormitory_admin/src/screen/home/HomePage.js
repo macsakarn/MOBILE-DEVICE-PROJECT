@@ -50,6 +50,7 @@ export default class HomePage extends Component {
       try {
         const resp = await axios.get(`${baseUrl}/all`);
         DATA = resp.data;
+
       } catch (err) {
         // Handle Error Here
         console.error(err);
@@ -63,7 +64,7 @@ export default class HomePage extends Component {
         if (item.roomId[1] == '3') floor4.push(item);
         if (item.roomId[1] == '4') floor5.push(item);
         electricity += !item.electric_unit ? 0 : item.electric_unit;
-        water += !item.water ? 0 : item.water;
+        water += !item.water_unit ? 0 : item.water_unit;
       });
 
       this.setState({
@@ -87,16 +88,19 @@ export default class HomePage extends Component {
     else if (this.state.selectFloor == 3) data = this.state.floor3;
     else if (this.state.selectFloor == 4) data = this.state.floor4;
     else if (this.state.selectFloor == 5) data = this.state.floor5;
-    else data = this.state.data
-    let search = data.filter(val=>{
-      return val.roomId.toLowerCase()
-      .includes(this.state.search.toLowerCase())
-    })
+    else{
+      data = this.state.data
+      var search = data.filter(val=>{
+        return val.roomId.toLowerCase()
+        .includes(this.state.search.toLowerCase())
+      })
+    } 
+    
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
           columnWrapperStyle={styles.colContainer}
-          data={search}
+          data={!search ? data: search}
           renderItem={data => this.renderItem(data)}
           numColumns={2}
           ListHeaderComponent={this.headder()}
@@ -122,6 +126,7 @@ export default class HomePage extends Component {
   }
 
   headder() {
+    console.log(this.state.electricity);
     return (
       <View>
         <View style={styles.section}>
@@ -135,13 +140,13 @@ export default class HomePage extends Component {
             }}>
             <BoxHome
               image={require('../../assets/Bolt.png')}
-              value={this.state.water}
+              value={this.state.electricity.toFixed(2)}
               color={Colors.Yellow}
               title="Electricity"
             />
             <BoxHome
               image={require('../../assets/water.png')}
-              value={this.state.electricity}
+              value={this.state.water.toFixed(2)}
               color={Colors.Blue}
               title="Water"
             />
@@ -154,7 +159,7 @@ export default class HomePage extends Component {
               source={require('../../assets/search.png')}
               style={{margin: 10}}
             />
-            <TextInput style={styles.input} placeholder="Search your ...." onChangeText={text=>this.onChangeSearch(text)}/>
+            <TextInput style={styles.input} placeHolder="Search your ...." onChangeText={text=>this.onChangeSearch(text)}/>
           </View>
           <View
             style={{
@@ -250,7 +255,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 0,
-    backgroundColor: '#fff',
+    height:40,
     color: '#424242',
   },
   colContainer: {

@@ -54,7 +54,7 @@ export default class FormTest extends ValidationComponent {
             />
             <TextInput
               ref="roomId"
-              placeholder="roomId"
+              placeHolder="roomId"
               onChangeText={roomId => this.setState({roomId})}
             />
           </View>
@@ -73,7 +73,7 @@ export default class FormTest extends ValidationComponent {
             />
             <TextInput
               ref="room_price"
-              placeholder="Price"
+              placeHolder="Price"
               keyboardType="numeric"
               onChangeText={room_price => this.setState({room_price})}
             />
@@ -159,10 +159,9 @@ const styles = StyleSheet.create({
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: "#ebebeb",
-    // borderRadius: 15,
     marginTop: StatusBar.currentHeight || 0,
     borderBottomWidth: 0.5,
+    height:40
   },
   btn: {
     justifyContent: 'center',

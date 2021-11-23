@@ -10,7 +10,7 @@ export default class BoxHome extends Component {
         return (
             <View style={[styles.box,{backgroundColor: color}]}>
               <Image  source={image} />
-              <Text style={{fontSize:18,fontWeight:'bold',color:"#fff",paddingVertical:5}}>{title}</Text>
+              <Text style={{fontSize:18,fontWeight:'bold',color:"#fff",paddingVertical:5, textAlign:'center' }}>{title}</Text>
               <Text style={{fontSize:14,color:"#fff"}}>{value}</Text>
             </View>
         )

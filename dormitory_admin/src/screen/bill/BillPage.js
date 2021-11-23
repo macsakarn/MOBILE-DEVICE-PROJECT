@@ -56,9 +56,31 @@ export default function BillPage({navigation}) {
     count_roomStatus();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Refreshed!');
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+
+  var createBill = async () => {
+    try {
+      await axios.post(`https://horchana-payment-service.herokuapp.com/api/invoice/create`,{secretCode:"123456"}).then(response => {
+        console.log(response);
+      });
+    } catch (error) {}
+  }
+
   const headder = (
     <View style={styles.section}>
-      <Text style={styles.headder}>Payment</Text>
+      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+        <View style={{flex:0.5}}></View>
+      <Text style={[styles.headder,{flex:1}]}>Payment</Text>
+      <TouchableOpacity style={{flex:0.5,alignItems:'flex-end'}} onPress={createBill}>
+        <Text>Create Bills</Text>
+      </TouchableOpacity>
+      </View>
       <View
         style={{
           flexDirection: 'row',

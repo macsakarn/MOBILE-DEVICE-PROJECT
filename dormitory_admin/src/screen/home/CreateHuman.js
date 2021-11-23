@@ -60,7 +60,7 @@ export default class CreateHuman extends ValidationComponent {
             <TextInput
               ref="name"
               style={styles.input}
-              placeholder="Name"
+              placeHolder="Name"
               onChangeText={name => this.setState({name})}
             />
           </View>
@@ -76,7 +76,7 @@ export default class CreateHuman extends ValidationComponent {
             <TextInput
               ref="tel"
               style={styles.input}
-              placeholder="Phone number"
+              placeHolder="Phone number"
               keyboardType="numeric"
               onChangeText={tel => this.setState({tel})}
             />
@@ -97,7 +97,7 @@ export default class CreateHuman extends ValidationComponent {
             <TextInput
               ref="password"
               style={styles.input}
-              placeholder="Password"
+              placeHolder="Password"
               secureTextEntry={true}
               keyboardType="numeric"
               onChangeText={password => this.setState({password})}
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     // borderRadius: 15,
     marginVertical: 10,
     borderBottomWidth: 0.5,
+    height:40
   },
   headder: {
     fontSize: 20,
