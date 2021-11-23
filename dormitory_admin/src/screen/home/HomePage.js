@@ -28,7 +28,10 @@ export default class HomePage extends Component {
     floor4: [],
     floor5: [],
     selectFloor: 1,
-    data:[]
+    data: [],
+    electricity: 0,
+    water: 0,
+    search:""
   };
 
   componentWillUnmount() {
@@ -36,67 +39,86 @@ export default class HomePage extends Component {
   }
 
   async componentDidMount() {
-    const {navigation} = this.props
+    const {navigation} = this.props;
     this._unsubscribe = navigation.addListener('focus', async () => {
       var floor1 = [],
-      floor2 = [],
-      floor3 = [],
-      floor4 = [],
-      floor5 = [],
-      DATA = [];
-    try {
-      const resp = await axios.get(`${baseUrl}/room/get/allroomsdata`);
-      DATA = resp.data.roomsData;
-    } catch (err) {
-      // Handle Error Here
-      console.error(err);
-    }
+        floor2 = [],
+        floor3 = [],
+        floor4 = [],
+        floor5 = [],
+        DATA = [];
+      try {
+        const resp = await axios.get(`${baseUrl}/all`);
+        DATA = resp.data;
+      } catch (err) {
+        // Handle Error Here
+        console.error(err);
+      }
+      let water = 0,
+        electricity = 0;
+      DATA.map(item => {
+        if (item.roomId[1] == '0') floor1.push(item);
+        if (item.roomId[1] == '1') floor2.push(item);
+        if (item.roomId[1] == '2') floor3.push(item);
+        if (item.roomId[1] == '3') floor4.push(item);
+        if (item.roomId[1] == '4') floor5.push(item);
+        electricity += !item.electric_unit ? 0 : item.electric_unit;
+        water += !item.water ? 0 : item.water;
+      });
 
-    DATA.map(item => {
-      if (item.roomId[1] == '0') floor1.push(item);
-      if (item.roomId[1] == '1') floor2.push(item);
-      if (item.roomId[1] == '2') floor3.push(item);
-      if (item.roomId[1] == '3') floor4.push(item);
-      if (item.roomId[1] == '4') floor5.push(item);
-    });
-    this.setState({
-      floor1,
-      floor2,
-      floor3,
-      floor4,
-      floor5,
-      data:DATA
-    });
+      this.setState({
+        floor1,
+        floor2,
+        floor3,
+        floor4,
+        floor5,
+        data: DATA,
+        water,
+        electricity
+      });
     });
   }
 
-  _headderSelect = floor => {
-    this.setState({selectFloor: floor});
-  };
-
   render() {
+    const {navigation} = this.props;
     let data;
     if (this.state.selectFloor == 1) data = this.state.floor1;
     else if (this.state.selectFloor == 2) data = this.state.floor2;
     else if (this.state.selectFloor == 3) data = this.state.floor3;
     else if (this.state.selectFloor == 4) data = this.state.floor4;
     else if (this.state.selectFloor == 5) data = this.state.floor5;
-    const {navigation} = this.props
+    else data = this.state.data
+    let search = data.filter(val=>{
+      return val.roomId.toLowerCase()
+      .includes(this.state.search.toLowerCase())
+    })
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
           columnWrapperStyle={styles.colContainer}
-          data={data}
+          data={search}
           renderItem={data => this.renderItem(data)}
           numColumns={2}
           ListHeaderComponent={this.headder()}
           ListFooterComponent={() => <View style={{height: 100}}></View>}
         />
-        <TouchableOpacity style={styles.btn} activeOpacity={.9} onPress={()=>navigation.navigate('CreateRoom')}>
+        <TouchableOpacity
+          style={styles.btn}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('CreateRoom')}>
           <Image source={require('../../assets/plus2.png')} />
         </TouchableOpacity>
       </SafeAreaView>
     );
+  }
+
+  onChangeSearch(search){
+    console.log(search);
+    if (!search) {
+      this.setState({selectFloor:1})
+    }else{
+      this.setState({search,selectFloor:99})
+    }
   }
 
   headder() {
@@ -113,13 +135,13 @@ export default class HomePage extends Component {
             }}>
             <BoxHome
               image={require('../../assets/Bolt.png')}
-              value="1200 Kwh"
+              value={this.state.water}
               color={Colors.Yellow}
               title="Electricity"
             />
             <BoxHome
               image={require('../../assets/water.png')}
-              value="1200 Kwh"
+              value={this.state.electricity}
               color={Colors.Blue}
               title="Electricity"
             />
@@ -132,10 +154,7 @@ export default class HomePage extends Component {
               source={require('../../assets/search.png')}
               style={{margin: 10}}
             />
-            <TextInput style={styles.input} placeholder="Search your ...." />
-            <TouchableOpacity style={{margin: 10}}>
-              <Image source={require('../../assets/slider_02.png')} />
-            </TouchableOpacity>
+            <TextInput style={styles.input} placeholder="Search your ...." onChangeText={text=>this.onChangeSearch(text)}/>
           </View>
           <View
             style={{
@@ -175,12 +194,13 @@ export default class HomePage extends Component {
   }
 
   renderItem = ({item}) => {
-    
     return (
       <Room
         title={item.roomId}
-        name={item.resident_info.name}
-        tel={item.resident_info.tel}
+        name={item.name}
+        tel={item.tel}
+        electric={!item.electric_unit ? 0 : item.electric_unit.toFixed(2)}
+        water={!item.water_unit ? 0 : item.water_unit.toFixed(2)}
         onPress={() => this._headderNavigate(item)}
       />
     );
@@ -188,8 +208,12 @@ export default class HomePage extends Component {
 
   _headderNavigate(item) {
     const {navigation} = this.props;
-    navigation.navigate('HomeDetail',{room:item.roomId});
+    navigation.navigate('HomeDetail', {room: item.roomId});
   }
+
+  _headderSelect = floor => {
+    this.setState({selectFloor: floor});
+  };
 }
 
 const {width} = Dimensions.get('screen');
@@ -251,7 +275,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
     elevation: 12,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

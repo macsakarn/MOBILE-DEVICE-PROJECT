@@ -10,7 +10,7 @@ export default class Room extends Component {
     const {
       title,
       name = 'wowza',
-      tel = '00-00',
+      tel = '',
       electric = 100,
       water = 100,
       onPress

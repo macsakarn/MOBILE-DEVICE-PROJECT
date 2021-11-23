@@ -41,7 +41,9 @@ export default class HomePage2 extends Component {
       try {
         const resp = await axios.get(`${baseUrl}/room/get/${room}`);
         let data = resp.data[0];
+        console.log("API");
         console.log(data);
+        console.log("-----------------------------------------");
         this.setState({
           name: data.name,
           password: data.password,
@@ -238,7 +240,7 @@ export default class HomePage2 extends Component {
   async _headderRemove() {
     const {navigation} = this.props;
     const {roomId} = this.state
-    console.log(roomId);
+
     try {
       const resp = await axios.delete(`${baseUrl}/room/removeperson/${roomId}`);
       if (resp.data.msg) {
@@ -252,7 +254,7 @@ export default class HomePage2 extends Component {
   async _headderRemoveRoom() {
     const {navigation, route} = this.props;
     const {roomId} = this.state
-    console.log(roomId);
+
     try {
       const resp = await axios.delete(`${baseUrl}/room/removeroom/${roomId}`);
       if (resp.data.msg) {
