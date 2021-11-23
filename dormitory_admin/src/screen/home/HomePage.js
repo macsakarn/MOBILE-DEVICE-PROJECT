@@ -118,9 +118,9 @@ export default class HomePage extends Component {
             />
             <BoxHome
               image={require('../../assets/water.png')}
-              value="1200 Unit"
+              value="1200 Kwh"
               color={Colors.Blue}
-              title="Water"
+              title="Electricity"
             />
             <BoxHome />
           </View>
