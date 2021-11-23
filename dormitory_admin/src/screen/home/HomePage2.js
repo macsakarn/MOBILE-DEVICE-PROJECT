@@ -7,17 +7,64 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  Alert
+  Alert,
 } from 'react-native';
 import Colors from '../../assets/color';
 import Detail from '../../components/Detail';
 
 import axios from 'axios';
 const baseUrl = 'https://horchana-room-services.herokuapp.com/api';
+
 export default class HomePage2 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      password: '',
+      tel: '',
+      roomId: '',
+      electric_meterId: '',
+      water_meterId: '',
+      room_price: 0,
+    };
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  async componentDidMount() {
+    const {navigation} = this.props
+    const {route} = this.props;
+    const {room} = route.params;
+    this._unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        const resp = await axios.get(`${baseUrl}/room/get/${room}`);
+        let data = resp.data[0];
+        console.log(data);
+        this.setState({
+          name: data.name,
+          password: data.password,
+          tel: data.tel,
+          roomId: data.roomId,
+          electric_meterId: data.electric_meter,
+          water_meterId: data.water_meter,
+          room_price: data.room_price,
+        });
+      } catch (err) {
+        // Handle Error Here
+        console.error(err);
+      }
+    });
+  }
+
   render() {
-    const {navigation, route} = this.props;
-    const {room,roomPrice,name,tel,password} = route.params;
+    console.log(this.state);
+    const {navigation} = this.props;
+    const {name, password, tel, roomId, room_price} = this.state
+    if (!roomId) {
+      return<View></View>
+    }
     return (
       <View style={styles.container}>
         <View style={styles.section}>
@@ -33,8 +80,10 @@ export default class HomePage2 extends Component {
               <Image source={require('../../assets/chevron.png')} />
             </TouchableOpacity>
             <Text style={styles.headder}>ROOM DETAILS</Text>
-            <TouchableOpacity style={{flex: 0.5}} onPress={()=>this.removeRoom()}>
-              <Text style={{textAlign:'right',color:"#fe0000"}}>DELETE</Text>
+            <TouchableOpacity
+              style={{flex: 0.5}}
+              onPress={() => this.removeRoom()}>
+              <Text style={{textAlign: 'right', color: '#fe0000'}}>DELETE</Text>
             </TouchableOpacity>
           </View>
           <View style={{alignItems: 'center'}}>
@@ -54,11 +103,11 @@ export default class HomePage2 extends Component {
                 color: Colors.Blue,
                 fontWeight: 'bold',
               }}>
-              {room}
+              {roomId}
             </Text>
             <Text
               style={{fontSize: 16, paddingVertical: 5, color: Colors.Gray}}>
-              {roomPrice} Bath
+              {room_price} Bath
             </Text>
           </View>
         </View>
@@ -93,14 +142,61 @@ export default class HomePage2 extends Component {
   }
 
   CreateHuman() {
-    const {navigation, route} = this.props;
-    const {name = null,room} = route.params;
-    if (!name) {
+    const {navigation} = this.props;
+    const {name, water_meterId, electric_meterId, roomId} = this.state
+    if (!electric_meterId && !water_meterId) {
+      return (
+        <>
+          <TouchableOpacity
+            style={styles.btn}
+            activeOpacity={0.9}
+            onPress={() => navigation.navigate('AddMeter', {type:"Water",roomId})}>
+            <Image
+              source={require('../../assets/add_a_photo.png')}
+              style={{tintColor: Colors.Blue}}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.btn, {right: 100}]}
+            activeOpacity={0.9}
+            onPress={() => navigation.navigate('AddMeter', {type:"Electric",roomId})}>
+            <Image
+              source={require('../../assets/add_a_photo.png')}
+              style={{tintColor: Colors.Yellow}}
+            />
+          </TouchableOpacity>
+        </>
+      );
+    } else if (!electric_meterId) {
       return (
         <TouchableOpacity
           style={styles.btn}
           activeOpacity={0.9}
-          onPress={() => navigation.navigate('CreateHuman', {room})}>
+          onPress={() => navigation.navigate('AddMeter', {type:"Electric",roomId})}>
+          <Image
+            source={require('../../assets/add_a_photo.png')}
+            style={{tintColor: Colors.Yellow}}
+          />
+        </TouchableOpacity>
+      );
+    } else if (!water_meterId) {
+      return (
+        <TouchableOpacity
+          style={styles.btn}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('AddMeter', {type:"Water",roomId})}>
+          <Image
+            source={require('../../assets/add_a_photo.png')}
+            style={{tintColor: Colors.Blue}}
+          />
+        </TouchableOpacity>
+      );
+    } else if (!name) {
+      return (
+        <TouchableOpacity
+          style={styles.btn}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('CreateHuman', {room:roomId})}>
           <Image source={require('../../assets/person_add_alt_1.png')} />
         </TouchableOpacity>
       );
@@ -110,62 +206,57 @@ export default class HomePage2 extends Component {
           style={styles.btn}
           activeOpacity={0.9}
           onPress={() => this.removeHuman()}>
-          <Image source={require('../../assets/person_remove.png')} style={{tintColor:"#fe0000"}} />
+          <Image
+            source={require('../../assets/person_remove.png')}
+            style={{tintColor: '#fe0000'}}
+          />
         </TouchableOpacity>
-      )
+      );
     }
   }
 
-  removeHuman(){
-    Alert.alert(
-      "Remove Resident",
-      "Do you want to remove Resident?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { text: "OK", onPress: () =>  this._headderRemove()}
-      ]
-    );
+  removeHuman() {
+    Alert.alert('Remove Resident', 'Do you want to remove Resident?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => this._headderRemove()},
+    ]);
   }
 
-  removeRoom(){
-    Alert.alert(
-      "Remove Room",
-      "Do you want to remove Room?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { text: "OK", onPress: () =>  this._headderRemoveRoom()}
-      ]
-    );
+  removeRoom() {
+    Alert.alert('Remove Room', 'Do you want to remove Room?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => this._headderRemoveRoom()},
+    ]);
   }
 
-  async _headderRemove(){
-    const {navigation, route} = this.props;
-    const {room} = route.params;
-    console.log(room);
+  async _headderRemove() {
+    const {navigation} = this.props;
+    const {roomId} = this.state
+    console.log(roomId);
     try {
-      const resp = await axios.delete(`${baseUrl}/room/removeperson/${room}`);
-      if(resp.data.msg){
-        navigation.popToTop()
+      const resp = await axios.delete(`${baseUrl}/room/removeperson/${roomId}`);
+      if (resp.data.msg) {
+        navigation.popToTop();
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-  async _headderRemoveRoom(){
+  async _headderRemoveRoom() {
     const {navigation, route} = this.props;
-    const {room} = route.params;
-    console.log(room);
+    const {roomId} = this.state
+    console.log(roomId);
     try {
-      const resp = await axios.delete(`${baseUrl}/room/removeroom/${room}`);
-      if(resp.data.msg){
-        navigation.popToTop()
+      const resp = await axios.delete(`${baseUrl}/room/removeroom/${roomId}`);
+      if (resp.data.msg) {
+        navigation.popToTop();
       }
     } catch (err) {
       console.error(err);

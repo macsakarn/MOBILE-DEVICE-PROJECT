@@ -7,24 +7,43 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
-  StatusBar
+  StatusBar,
+  Linking,
 } from 'react-native';
 
-import Colors from '../assets/color'
+import Colors from '../../assets/color';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
+import axios from 'axios';
 
 class ScanScreen extends Component {
-  onSuccess = e => {
-    const {scan,type, back} = this.props
-    console.log(e.data);
-    scan(type,e.data)
-    back()
+  onSuccess = async (e) => {
+    const {navigation, route} = this.props;
+    const {roomId} = route.params;
+
+    let front = e.data.split('reg/');
+    let i = front[1].indexOf('/');
+    let back = '/' + front[1].slice(i + 1);
+    let url = front[0]+"reg/"+ roomId + back
+    console.log(url)
+
+    try {
+      const resp = await axios.get(url);
+      let data = resp.data;
+      if (data.status) {
+        navigation.goBack();
+      }
+    } catch (err) {
+      // Handle Error Here
+      console.error(err);
+    }
+    
   };
 
   render() {
-    const {type, back} = this.props
+    const {navigation, route} = this.props;
+    const {type, roomId} = route.params;
     return (
       <QRCodeScanner
         onRead={this.onSuccess}
@@ -32,11 +51,13 @@ class ScanScreen extends Component {
         topContent={
           <View style={[styles.section, styles.row]}>
             <TouchableOpacity
-              onPress={back}
-              style={{flex: 0.5}}>
-              <Image source={require('../assets/chevron.png')} />
+              style={{flex: 0.5}}
+              onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/chevron.png')} />
             </TouchableOpacity>
-            <Text style={styles.headder}>Scan meter {type}</Text>
+            <Text style={styles.headder}>
+              Scan meter {type} {roomId}
+            </Text>
             <View style={{flex: 0.5}}></View>
           </View>
         }
@@ -52,7 +73,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 30,
     marginBottom: 10,
-    flex:1,
+    flex: 1,
   },
   headder: {
     fontSize: 20,

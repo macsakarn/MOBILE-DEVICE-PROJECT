@@ -8,71 +8,25 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 
 import ValidationComponent from 'react-native-form-validator';
 import Colors from '../../assets/color';
 
-import BtnQR from '../../components/BtnQRcode';
+import axios from 'axios';
+const baseUrl = 'https://horchana-room-services.herokuapp.com/api';
 export default class FormTest extends ValidationComponent {
   constructor(props) {
     super(props);
     this.state = {
       roomId: '',
       room_price: null,
-      electric_meterId: '',
-      water_meterId: '',
-      electricCam: false,
-      waterCam: false,
     };
-  }
-
-  _onPressButton() {
-    const {roomID, room_price, electric_meterId, water_meterId} = this.state;
-    // Call ValidationComponent validate method
-    this.validate({
-      roomId: {required: true,},
-      room_price: {required: true, numbers: true},
-      electric_meterId: {required: true,},
-      water_meterId: {required: true,},
-    });
-  }
-
-  _headdleBack = () => {
-    this.setState({
-      electricCam: false,
-      waterCam: false,
-    });
-  };
-
-  _headdleQR(type, value) {
-    if (type == 'electric') {
-      this.setState({
-        electric_meterId: value,
-      });
-    } else {
-      this.setState({
-        water_meterId: value,
-      });
-    }
   }
 
   render() {
     const {navigation} = this.props;
-    const {electricCam, electric_meterId, waterCam, water_meterId} = this.state;
-    if (electricCam) {
-      return (
-        <BtnQR
-          back={this._headdleBack}
-          scan={this._headdleQR}
-          type={'electric'}
-        />
-      );
-    } else if (waterCam) {
-      return (
-        <BtnQR back={this._headdleBack} scan={this._headdleQR} type={'water'} />
-      );
-    }
     return (
       <View style={styles.container}>
         <View style={[styles.section, styles.row]}>
@@ -124,40 +78,6 @@ export default class FormTest extends ValidationComponent {
               onChangeText={room_price => this.setState({room_price})}
             />
           </View>
-          <View
-            style={[
-              styles.row,
-              {justifyContent: 'space-around',marginTop: StatusBar.currentHeight + 20 || 0},
-            ]}>
-            <View style={{alignItems: 'center'}}>
-              <Text style={styles.text}>
-                {!electric_meterId ? 'Electric Meter' : electric_meterId}
-              </Text>
-              <TouchableOpacity
-                style={[styles.btn, {
-                  borderColor: this.isFieldInError('electric_meterId')
-                    ? '#fe0000'
-                    : '#bababa',
-                },]}
-                onPress={() => this.setState({electricCam: true})}>
-                <Image source={require('../../assets/camera.png')} />
-              </TouchableOpacity>
-            </View>
-            <View style={{alignItems: 'center'}}>
-              <Text style={styles.text}>
-                {!electric_meterId ? 'Water Meter' : electric_meterId}
-              </Text>
-              <TouchableOpacity
-                style={[styles.btn, {
-                  borderColor: this.isFieldInError('water_meterId')
-                    ? '#fe0000'
-                    : '#bababa',
-                },]}
-                onPress={() => this.setState({waterCam: true})}>
-                <Image source={require('../../assets/camera.png')} />
-              </TouchableOpacity>
-            </View>
-          </View>
           <TouchableOpacity
             style={styles.btnAPI}
             onPress={() => this._onPressButton()}>
@@ -174,6 +94,39 @@ export default class FormTest extends ValidationComponent {
         </View>
       </View>
     );
+  }
+  async _onPressButton() {
+    const {navigation} = this.props
+    const {roomId,room_price} = this.state
+    this.validate({
+      roomId: {required: true},
+      room_price: {required: true, numbers: true},
+    });
+    if (this.isFormValid()) {
+      const data = {
+        roomId,
+        electric_meterId: null,
+        water_meterId: null,
+        room_price:parseInt(room_price),
+        resident_info: {
+          name: null,
+          password: null,
+          tel: null,
+          entrance_date: null,
+          entrance_code: null,
+        },
+      }
+      try {
+        const resp = await axios.post(`${baseUrl}/room/create`, data);
+        if (resp.data.msg) {
+          navigation.popToTop();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      Alert.alert('Error', this.getErrorMessages(), [{text: 'OK'}]);
+    }
   }
 }
 
@@ -208,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: "#ebebeb",
     // borderRadius: 15,
-    marginTop: StatusBar.currentHeight  || 0,
+    marginTop: StatusBar.currentHeight || 0,
     borderBottomWidth: 0.5,
   },
   btn: {
