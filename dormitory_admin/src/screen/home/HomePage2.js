@@ -26,6 +26,10 @@ export default class HomePage2 extends Component {
       electric_meterId: '',
       water_meterId: '',
       room_price: 0,
+      electric_unit: null,
+      water_unit: null,
+      electric_price: null,
+      water_price: null,
     };
   }
 
@@ -34,16 +38,17 @@ export default class HomePage2 extends Component {
   }
 
   async componentDidMount() {
-    const {navigation} = this.props
+    const {navigation} = this.props;
     const {route} = this.props;
     const {room} = route.params;
     this._unsubscribe = navigation.addListener('focus', async () => {
       try {
         const resp = await axios.get(`${baseUrl}/room/get/${room}`);
         let data = resp.data[0];
-        console.log("API");
+        console.log('-----------------------------------------');
+        console.log('API');
         console.log(data);
-        console.log("-----------------------------------------");
+        console.log('-----------------------------------------');
         this.setState({
           name: data.name,
           password: data.password,
@@ -52,6 +57,10 @@ export default class HomePage2 extends Component {
           electric_meterId: data.electric_meter,
           water_meterId: data.water_meter,
           room_price: data.room_price,
+          electric_unit: data.electric_unit,
+          water_unit: data.water_unit,
+          electric_price: data.electric_price,
+          water_price: data.water_price,
         });
       } catch (err) {
         // Handle Error Here
@@ -61,11 +70,13 @@ export default class HomePage2 extends Component {
   }
 
   render() {
-    console.log(this.state);
     const {navigation} = this.props;
-    const {name, password, tel, roomId, room_price} = this.state
+    const {name, password, tel, roomId, room_price,electric_unit,
+      water_unit,
+      electric_price,
+      water_price} = this.state;
     if (!roomId) {
-      return<View></View>
+      return <View></View>;
     }
     return (
       <View style={styles.container}>
@@ -118,23 +129,23 @@ export default class HomePage2 extends Component {
           <Detail title={'Contact'} value={tel} />
           <Detail title={'password'} value={password} />
           <Detail
-            title={'Usege today'}
-            value={'1000'}
+            title={'Usege unit'}
+            value={!electric_unit ? 0 : electric_unit.toFixed(2)}
             image={require('../../assets/Bolt2.png')}
           />
           <Detail
-            title={'Usege this month'}
-            value={'1000'}
+            title={'Usege price'}
+            value={!electric_price ? 0 : electric_price.toFixed(2)}
             image={require('../../assets/Bolt2.png')}
           />
           <Detail
-            title={'Usege today'}
-            value={'1000'}
+            title={'Usege unit'}
+            value={!water_unit ? 0 : water_unit.toFixed(2)}
             image={require('../../assets/water2.png')}
           />
           <Detail
-            title={'Usege this month'}
-            value={'1000'}
+            title={'Usege price'}
+            value={!water_price ? 0 : water_price.toFixed(2)}
             image={require('../../assets/water2.png')}
           />
         </View>
@@ -145,14 +156,16 @@ export default class HomePage2 extends Component {
 
   CreateHuman() {
     const {navigation} = this.props;
-    const {name, water_meterId, electric_meterId, roomId} = this.state
+    const {name, water_meterId, electric_meterId, roomId} = this.state;
     if (!electric_meterId && !water_meterId) {
       return (
         <>
           <TouchableOpacity
             style={styles.btn}
             activeOpacity={0.9}
-            onPress={() => navigation.navigate('AddMeter', {type:"Water",roomId})}>
+            onPress={() =>
+              navigation.navigate('AddMeter', {type: 'Water', roomId})
+            }>
             <Image
               source={require('../../assets/add_a_photo.png')}
               style={{tintColor: Colors.Blue}}
@@ -161,7 +174,9 @@ export default class HomePage2 extends Component {
           <TouchableOpacity
             style={[styles.btn, {right: 100}]}
             activeOpacity={0.9}
-            onPress={() => navigation.navigate('AddMeter', {type:"Electric",roomId})}>
+            onPress={() =>
+              navigation.navigate('AddMeter', {type: 'Electric', roomId})
+            }>
             <Image
               source={require('../../assets/add_a_photo.png')}
               style={{tintColor: Colors.Yellow}}
@@ -174,7 +189,9 @@ export default class HomePage2 extends Component {
         <TouchableOpacity
           style={styles.btn}
           activeOpacity={0.9}
-          onPress={() => navigation.navigate('AddMeter', {type:"Electric",roomId})}>
+          onPress={() =>
+            navigation.navigate('AddMeter', {type: 'Electric', roomId})
+          }>
           <Image
             source={require('../../assets/add_a_photo.png')}
             style={{tintColor: Colors.Yellow}}
@@ -186,7 +203,9 @@ export default class HomePage2 extends Component {
         <TouchableOpacity
           style={styles.btn}
           activeOpacity={0.9}
-          onPress={() => navigation.navigate('AddMeter', {type:"Water",roomId})}>
+          onPress={() =>
+            navigation.navigate('AddMeter', {type: 'Water', roomId})
+          }>
           <Image
             source={require('../../assets/add_a_photo.png')}
             style={{tintColor: Colors.Blue}}
@@ -198,7 +217,7 @@ export default class HomePage2 extends Component {
         <TouchableOpacity
           style={styles.btn}
           activeOpacity={0.9}
-          onPress={() => navigation.navigate('CreateHuman', {room:roomId})}>
+          onPress={() => navigation.navigate('CreateHuman', {room: roomId})}>
           <Image source={require('../../assets/person_add_alt_1.png')} />
         </TouchableOpacity>
       );
@@ -239,7 +258,7 @@ export default class HomePage2 extends Component {
 
   async _headderRemove() {
     const {navigation} = this.props;
-    const {roomId} = this.state
+    const {roomId} = this.state;
 
     try {
       const resp = await axios.delete(`${baseUrl}/room/removeperson/${roomId}`);
@@ -253,7 +272,7 @@ export default class HomePage2 extends Component {
 
   async _headderRemoveRoom() {
     const {navigation, route} = this.props;
-    const {roomId} = this.state
+    const {roomId} = this.state;
 
     try {
       const resp = await axios.delete(`${baseUrl}/room/removeroom/${roomId}`);
