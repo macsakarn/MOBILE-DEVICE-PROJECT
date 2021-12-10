@@ -16,7 +16,7 @@ import axios from 'axios';
 const baseURL = 'https://horchana-payment-service.herokuapp.com/api/invoice/';
 
 export default function TextBoxPage2({route, navigation}) {
-  const {roomId, roomPrice, name, tel, waterPrice, electPrice, invoice_month} =
+  const {roomId, roomPrice, name, tel, waterPrice, electPrice, invoice_month, status} =
     route.params;
   //   console.log(roomId);
   const changeToConfirm = () => {
@@ -39,6 +39,28 @@ export default function TextBoxPage2({route, navigation}) {
       console.log(error);
     });
   };
+  let waitBtn = status ==  'uncheck'|| 'confirm' || 'wait' ? (
+    <TouchableOpacity
+      style={styles.btnWait}
+      activeOpacity={0.9}
+      onPress={() => {
+        changeToWait();
+        navigation.goBack();
+      }}>
+      <Image source={require('../../assets/alarm.png')} />
+    </TouchableOpacity> 
+  ): <View></View>;
+  let confirmBtn = status == 'uncheck' || 'wait'? (
+    <TouchableOpacity
+      style={styles.btnComfirm}
+      activeOpacity={0.9}
+      onPress={() => {
+        changeToConfirm();
+        navigation.goBack();
+      }}>
+      <Image source={require('../../assets/assignment.png')} />
+    </TouchableOpacity>
+   ): <View></View>;
 
   return (
     <View style={styles.container}>
@@ -78,7 +100,7 @@ export default function TextBoxPage2({route, navigation}) {
             }}>
             {roomId}
           </Text>
-          <Text style={{fontSize: 16, paddingVertical: 5, color: Colors.Gray}}>
+          <Text style={{fontSize: 16, paddingVertical: 5, color: Colors.Green}}>
             {roomPrice} Bath
           </Text>
         </View>
@@ -97,29 +119,13 @@ export default function TextBoxPage2({route, navigation}) {
           image={require('../../assets/water2.png')}
         />
         <Detail
-          title={'Sum bill price.'}
+          title={'Total bill price.'}
           value={(waterPrice + electPrice + roomPrice).toFixed(2)}
           image={require('../../assets/payment2.png')}
         />
       </View>
-      <TouchableOpacity
-        style={styles.btnWait}
-        activeOpacity={0.9}
-        onPress={() => {
-          changeToWait();
-          navigation.goBack();
-        }}>
-        <Image source={require('../../assets/alarmred.png')} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btnComfirm}
-        activeOpacity={0.9}
-        onPress={() => {
-          changeToConfirm();
-          navigation.goBack();
-        }}>
-        <Image source={require('../../assets/assignmentGreen.png')} />
-      </TouchableOpacity>
+      {waitBtn}
+      {confirmBtn}
     </View>
   );
 }
@@ -146,7 +152,7 @@ const styles = StyleSheet.create({
   btnWait: {
     height: 75,
     width: 75,
-    backgroundColor: Colors.White,
+    backgroundColor: Colors.Blue,
     position: 'absolute',
     bottom: 160,
     right: 10,
@@ -165,7 +171,7 @@ const styles = StyleSheet.create({
   btnComfirm: {
     height: 75,
     width: 75,
-    backgroundColor: Colors.White,
+    backgroundColor: Colors.Green,
     position: 'absolute',
     bottom: 80,
     right: 10,

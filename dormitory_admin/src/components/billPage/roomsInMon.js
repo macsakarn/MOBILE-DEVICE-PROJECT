@@ -1,20 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
 
 import Colors from '../../assets/color';
 
 export default function roomsInMon(props) {
-  
-
+  const [disabled, setDisabled] = useState(false);
 
   const renderItem = items => {
     let status_color;
-    if (items.item.status == 'wait') status_color = Colors.Blue;
-    else if (items.item.status == 'uncheck') status_color = Colors.Yellow;
+    if (items.item.status == 'wait') {
+      status_color = Colors.Blue;
+      // setDisabled(true);
+    } else if (items.item.status == 'uncheck') status_color = Colors.Yellow;
     else if (items.item.status == 'confirm') status_color = Colors.Green;
 
     return (
       <TouchableOpacity
+        disabled={disabled}
         style={[
           styles.roomBtn,
           {
@@ -24,8 +26,16 @@ export default function roomsInMon(props) {
           },
         ]}
         onPress={() => {
-          props.navigation.navigate('BillDetail',
-          {roomId:items.item.roomId, roomPrice:items.item.price.room, name:items.item.resident_info.name,tel:items.item.resident_info.tel,waterPrice:items.item.price.water,electPrice:items.item.price.electricity,invoice_month:items.item.invoice_month});
+          props.navigation.navigate('BillDetail', {
+            roomId: items.item.roomId,
+            roomPrice: items.item.price.room,
+            name: items.item.resident_info.name,
+            tel: items.item.resident_info.tel,
+            waterPrice: items.item.price.water,
+            electPrice: items.item.price.electricity,
+            invoice_month: items.item.invoice_month,
+            status: items.item.status,
+          });
         }}
         // onPress={() => {
         //   setNum();

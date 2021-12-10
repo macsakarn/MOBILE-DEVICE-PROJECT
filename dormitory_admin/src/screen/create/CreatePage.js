@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Alert
+  Alert,StatusBar
 } from 'react-native';
 
 import Colors from '../../assets/color';
@@ -258,6 +258,9 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     flexDirection: 'column',
     alignItems: 'center',
+    marginBottom: 10,
+    paddingBottom: 5,
+    paddingTop: StatusBar.currentHeight || 0,
   },
   hd_txt: {
     fontSize: 20,

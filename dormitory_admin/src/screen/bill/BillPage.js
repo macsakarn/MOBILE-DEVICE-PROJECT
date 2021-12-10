@@ -78,7 +78,7 @@ export default function BillPage({navigation}) {
         <View style={{flex:0.5}}></View>
       <Text style={[styles.headder,{flex:1}]}>Payment</Text>
       <TouchableOpacity style={{flex:0.5,alignItems:'flex-end'}} onPress={createBill}>
-        <Text>Create Bills</Text>
+        <Text style={{color:Colors.Blue}}>Create Bill</Text>
       </TouchableOpacity>
       </View>
       <View
