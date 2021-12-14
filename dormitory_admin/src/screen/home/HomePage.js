@@ -117,7 +117,7 @@ export default class HomePage extends Component {
   }
 
   onChangeSearch(search){
-    console.log(search);
+    // console.log(search);
     if (!search) {
       this.setState({selectFloor:1})
     }else{
@@ -126,7 +126,7 @@ export default class HomePage extends Component {
   }
 
   headder() {
-    console.log(this.state.electricity);
+    // console.log(this.state.electricity);
     return (
       <View>
         <View style={styles.section}>
