@@ -1,3 +1,4 @@
+import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -16,6 +17,8 @@ import Colors from '../../assets/color';
 import BoxHome from '../../components/onlyHome/BoxHome';
 import RoomsInMon from '../../components/billPage/roomsInMon';
 
+import dataDemo from '../../dataDemo/roomsBills.json';
+
 import axios from 'axios';
 const baseUrl =
   'https://horchana-payment-service.herokuapp.com/api/invoice/get/all';
@@ -24,7 +27,9 @@ export default function BillPage({navigation}) {
   const [waitRoom, setWaitRoom] = useState(0);
   const [unCheckRoom, setunCheckRoom] = useState(0);
   const [confrimRoom, setConfrimRoom] = useState(0);
-  const [rooomDB, setRoomDb] = useState([]);
+  const [roomDB, setRoomDb] = useState([]);
+
+  const isFocused = useIsFocused();
 
   const getDB = async () => {
     try {
@@ -34,52 +39,74 @@ export default function BillPage({navigation}) {
       });
     } catch (error) {}
   };
+  // const getDB = () => {
+  //   setRoomDb(dataDemo);
+  // };
+
   const count_roomStatus = () => {
-    let num1 = 0;
-    let num2 = 0;
-    let num3 = 0;
-    const forCount = rooomDB.map(items => {
-      items.bills.map(item => {
-        if (item.status == 'wait') num1++;
-        else if (item.status == 'uncheck') num2++;
-        else if (item.status == 'confirm') num3++;
+    var num1 = 0;
+    var num2 = 0;
+    var num3 = 0;
+    console.log(roomDB.length);
+    roomDB.forEach(items => {
+      items.bills.forEach(item => {
+        console.log(item.status + '****');
+        if (item.status == 'wait') {
+          num1 = num1 + 1;
+          // setWaitRoom(waitRoom + 1);
+        } else if (item.status == 'uncheck') {
+          num2 = num2 + 1;
+          // setunCheckRoom(unCheckRoom + 1);
+        } else if (item.status == 'confirm') {
+          num3 = num3 + 1;
+          // setConfrimRoom(confrimRoom + 1);
+        }
       });
     });
-
     setWaitRoom(num1);
     setunCheckRoom(num2);
     setConfrimRoom(num3);
+    console.log(waitRoom, unCheckRoom, confrimRoom);
   };
 
   useEffect(() => {
     getDB();
+    // count_roomStatus();
+    console.log('Refreshed!');
+    // setTimeout(() => {
     count_roomStatus();
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      console.log('Refreshed!');
-    });
-    return unsubscribe;
-  }, [navigation]);
-
+    // }, 3000);
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Refreshed!');
+    //   getDB();
+    //   count_roomStatus();
+    // });
+    // return unsubscribe;
+  }, [isFocused]);
 
   var createBill = async () => {
     try {
-      await axios.post(`https://horchana-payment-service.herokuapp.com/api/invoice/create`,{secretCode:"123456"}).then(response => {
-        console.log(response);
-      });
+      await axios
+        .post(
+          `https://horchana-payment-service.herokuapp.com/api/invoice/create`,
+          {secretCode: '123456'},
+        )
+        .then(response => {
+          console.log(response);
+        });
     } catch (error) {}
-  }
+  };
 
   const headder = (
     <View style={styles.section}>
-      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-        <View style={{flex:0.5}}></View>
-      <Text style={[styles.headder,{flex:1}]}>Payment</Text>
-      <TouchableOpacity style={{flex:0.5,alignItems:'flex-end'}} onPress={createBill}>
-        <Text>Create Bills</Text>
-      </TouchableOpacity>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{flex: 0.5}}></View>
+        <Text style={[styles.headder, {flex: 1}]}>Payment</Text>
+        <TouchableOpacity
+          style={{flex: 0.5, alignItems: 'flex-end'}}
+          onPress={createBill}>
+          <Text style={{color: Colors.Blue}}>Create Bill</Text>
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -109,30 +136,32 @@ export default function BillPage({navigation}) {
       </View>
     </View>
   );
-  const isBack = (wait, uncheck, confirms) => {
-    setWaitRoom(wait);
-    setunCheckRoom(uncheck);
-    setConfrimRoom(confirms);
-  };
-  const renderItem = rooomDB => {
+  const renderItem = roomDB => {
     return (
       <RoomsInMon
-        month={rooomDB.item.month}
-        bills={rooomDB.item.bills}
+        month={roomDB.item.month}
+        bills={roomDB.item.bills}
         navigation={navigation}
-        isBack={isBack}
       />
     );
   };
-
+  // getDB();
   return (
     <SafeAreaView style={styles.container}>
       {headder}
       <FlatList
-        data={rooomDB}
-        renderItem={rooomDB => renderItem(rooomDB)}
+        data={roomDB}
+        renderItem={roomDB => renderItem(roomDB)}
         numColumns={1}
+        // style={{paddingBottom:0}}
       />
+
+      <View
+        style={{
+          height: 70,
+          backgroundColor: Colors.White,
+          marginTop: 10,
+        }}></View>
     </SafeAreaView>
   );
 }
@@ -157,7 +186,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.Dask,
     textAlign: 'center',
-    bottom:5
+    bottom: 5,
   },
   colContainer: {
     backgroundColor: Colors.White,

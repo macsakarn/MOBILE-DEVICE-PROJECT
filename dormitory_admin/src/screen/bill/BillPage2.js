@@ -8,6 +8,7 @@ import {
   Dimensions,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
 import Colors from '../../assets/color';
 import Detail from '../../components/Detail';
@@ -16,8 +17,16 @@ import axios from 'axios';
 const baseURL = 'https://horchana-payment-service.herokuapp.com/api/invoice/';
 
 export default function TextBoxPage2({route, navigation}) {
-  const {roomId, roomPrice, name, tel, waterPrice, electPrice, invoice_month} =
-    route.params;
+  const {
+    roomId,
+    roomPrice,
+    name,
+    tel,
+    waterPrice,
+    electPrice,
+    invoice_month,
+    status,
+  } = route.params;
   //   console.log(roomId);
   const changeToConfirm = () => {
     console.log(roomId, invoice_month);
@@ -39,7 +48,35 @@ export default function TextBoxPage2({route, navigation}) {
       console.log(error);
     });
   };
-
+  let waitBtn =
+    status == 'uncheck' || 'confirm' || 'wait' ? (
+      <TouchableOpacity
+        style={styles.btnWait}
+        activeOpacity={0.9}
+        onPress={() => {
+          changeToWait();
+          navigation.goBack();
+        }}>
+        <Image source={require('../../assets/alarm.png')} />
+      </TouchableOpacity>
+    ) : (
+      <View></View>
+    );
+  let confirmBtn =
+    status != 'confirm' ? (
+      <TouchableOpacity
+        style={styles.btnComfirm}
+        activeOpacity={0.9}
+        onPress={() => {
+          changeToConfirm();
+          navigation.goBack();
+        }}>
+        <Image source={require('../../assets/assignment.png')} />
+      </TouchableOpacity>
+    ) : (
+      <View></View>
+    );
+  console.log(status);
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -78,48 +115,43 @@ export default function TextBoxPage2({route, navigation}) {
             }}>
             {roomId}
           </Text>
-          <Text style={{fontSize: 16, paddingVertical: 5, color: Colors.Gray}}>
+          <Text style={{fontSize: 16, paddingVertical: 5, color: Colors.Green}}>
             {roomPrice} Bath
           </Text>
         </View>
       </View>
-      <View style={styles.section}>
-        <Detail title={'Residents'} value={name} />
-        <Detail title={'Contact'} value={tel} />
-        <Detail
-          title={'Usege this month'}
-          value={electPrice.toFixed(2)}
-          image={require('../../assets/Bolt2.png')}
-        />
-        <Detail
-          title={'Usege this month'}
-          value={waterPrice.toFixed(2)}
-          image={require('../../assets/water2.png')}
-        />
-        <Detail
-          title={'Sum bill price.'}
-          value={(waterPrice + electPrice + roomPrice).toFixed(2)}
-          image={require('../../assets/payment2.png')}
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.btnWait}
-        activeOpacity={0.9}
-        onPress={() => {
-          changeToWait();
-          navigation.goBack();
-        }}>
-        <Image source={require('../../assets/alarmred.png')} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btnComfirm}
-        activeOpacity={0.9}
-        onPress={() => {
-          changeToConfirm();
-          navigation.goBack();
-        }}>
-        <Image source={require('../../assets/assignmentGreen.png')} />
-      </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.section}>
+          <Detail title={'Residents'} value={name} />
+          <Detail title={'Contact'} value={tel} />
+          <Detail
+            title={'Usege this month'}
+            value={electPrice.toFixed(2)}
+            image={require('../../assets/Bolt2.png')}
+          />
+          <Detail
+            title={'Usege this month'}
+            value={waterPrice.toFixed(2)}
+            image={require('../../assets/water2.png')}
+          />
+          <Detail
+            title={'Total bill price.'}
+            value={(waterPrice + electPrice + roomPrice).toFixed(2)}
+            image={require('../../assets/payment2.png')}
+          />
+        </View>
+
+        <View style={[styles.section,{paddingBottom:100}]}>
+          <Image
+            style={styles.receiptImg}
+            source={{
+              uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+            }}
+          />
+        </View>
+      </ScrollView>
+      {waitBtn}
+      {confirmBtn}
     </View>
   );
 }
@@ -146,7 +178,7 @@ const styles = StyleSheet.create({
   btnWait: {
     height: 75,
     width: 75,
-    backgroundColor: Colors.White,
+    backgroundColor: Colors.Blue,
     position: 'absolute',
     bottom: 160,
     right: 10,
@@ -165,7 +197,7 @@ const styles = StyleSheet.create({
   btnComfirm: {
     height: 75,
     width: 75,
-    backgroundColor: Colors.White,
+    backgroundColor: Colors.Green,
     position: 'absolute',
     bottom: 80,
     right: 10,
@@ -180,5 +212,9 @@ const styles = StyleSheet.create({
     elevation: 12,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  receiptImg: {
+    width: 350,
+    height: 400,
   },
 });
