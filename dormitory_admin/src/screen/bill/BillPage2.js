@@ -145,7 +145,7 @@ export default function TextBoxPage2({route, navigation}) {
           <Image
             style={styles.receiptImg}
             source={{
-              uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+              uri: 'https://inex.co.th/home/wp-content/uploads/2020/10/%E0%B8%AA%E0%B8%A5%E0%B8%B4%E0%B8%9B%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%82%E0%B8%AD%E0%B8%99%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B8%AB%E0%B8%99%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%B7%E0%B8%AD.png',
             }}
           />
         </View>
@@ -215,6 +215,6 @@ const styles = StyleSheet.create({
   },
   receiptImg: {
     width: 350,
-    height: 400,
+    height: 470,
   },
 });
