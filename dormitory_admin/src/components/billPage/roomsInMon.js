@@ -16,7 +16,7 @@ export default function roomsInMon(props) {
       date.substring(0, 5) + date.substring(5, 9).split('').reverse().join('');
     if (items.item.status == 'wait') {
       status_color = Colors.Blue;
-      // disabled = true;
+      disabled = true;
     } else if (items.item.status == 'uncheck') status_color = Colors.Yellow;
     else if (items.item.status == 'confirm') status_color = Colors.Green;
 
