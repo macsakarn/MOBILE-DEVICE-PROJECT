@@ -54,7 +54,7 @@ export default class FormTest extends ValidationComponent {
             />
             <TextInput
               ref="roomId"
-              placeHolder="roomId"
+              placeholder="roomId"
               onChangeText={roomId => this.setState({roomId})}
             />
           </View>
@@ -73,7 +73,7 @@ export default class FormTest extends ValidationComponent {
             />
             <TextInput
               ref="room_price"
-              placeHolder="Price"
+              placeholder="Price"
               keyboardType="numeric"
               onChangeText={room_price => this.setState({room_price})}
             />

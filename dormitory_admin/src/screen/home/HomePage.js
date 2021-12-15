@@ -159,7 +159,7 @@ export default class HomePage extends Component {
               source={require('../../assets/search.png')}
               style={{margin: 10}}
             />
-            <TextInput style={styles.input} placeHolder="Search your ...." onChangeText={text=>this.onChangeSearch(text)}/>
+            <TextInput style={styles.input} placeholder="Search your ...." onChangeText={text=>this.onChangeSearch(text)}/>
           </View>
           <View
             style={{
