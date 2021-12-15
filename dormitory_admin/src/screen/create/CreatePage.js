@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Alert
+  Alert,
+  StatusBar,
 } from 'react-native';
 
 import Colors from '../../assets/color';
@@ -23,7 +24,7 @@ export default function CreatePage({navigation}) {
   const [fName, setFName] = useState('');
   const [password, setpassword] = useState('');
   const [phone, setPhone] = useState('');
-  const [rooomDB, setRoomDb] = useState(null);
+  // const [rooomDB, setRoomDb] = useState(null);
   const [selectFloor, setSelectFloor] = useState(1);
   const [floor1, setFloor1] = useState([]);
   const [floor2, setFloor2] = useState([]);
@@ -43,6 +44,7 @@ export default function CreatePage({navigation}) {
     try {
       await axios.get(baseUrl_room_data).then(response => {
         Data = response.data.roomsData;
+        // console.log(Data);
       });
     } catch (err) {
       // Handle Error Here
@@ -73,23 +75,21 @@ export default function CreatePage({navigation}) {
     getDB();
   }, [selectRoom]);
 
-
   const postMSG = () => {
     const data = {
       resident_info: {
-        name:fName,
-        password:password,
-        tel:phone
-      }
+        name: fName,
+        password: password,
+        tel: phone,
+      },
     };
-    axios.post(baseURL_add_resident+selectRoom, data)
-      .catch(error => {
-        console.log(error);
-      });
+    axios.post(baseURL_add_resident + selectRoom, data).catch(error => {
+      console.log(error);
+    });
     setFName('');
     setpassword('');
-    setPhone('')
-    setSelectRoom('')
+    setPhone('');
+    setSelectRoom('');
   };
 
   const _headderSelect = floor => {
@@ -127,6 +127,7 @@ export default function CreatePage({navigation}) {
   );
 
   const renderItem = ({item}) => {
+    // console.log(item.roomId);
     return (
       <TouchableOpacity
         style={[
@@ -156,6 +157,7 @@ export default function CreatePage({navigation}) {
   else if (selectFloor == 2) data = floor2;
   else if (selectFloor == 3) data = floor3;
   else if (selectFloor == 4) data = floor4;
+  // console.log(data);
   if (selectRoom) console.log(selectRoom);
   return (
     <View style={styles.container}>
@@ -258,6 +260,9 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     flexDirection: 'column',
     alignItems: 'center',
+    marginBottom: 10,
+    paddingBottom: 5,
+    paddingTop: StatusBar.currentHeight || 0,
   },
   hd_txt: {
     fontSize: 20,
